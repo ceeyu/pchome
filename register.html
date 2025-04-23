@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PChome 註冊頁</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body {
+            background-color: #f2f2f2;
+            font-family: Arial, sans-serif;
+        }
+
+        .login-page {
+            max-width: 480px;
+            /* ← 加寬到 480px，看起來剛好 */
+            margin: 50px auto;
+            padding: 20px;
+        }
+
+        .login-box {
+            background-color: #ffffff;
+            border-radius: 8px;
+        }
+
+        .pchome-title {
+            color: #d00;
+            font-weight: bold;
+            font-size: 1.5rem;
+        }
+
+        .btn-danger {
+            background-color: #d00;
+            border: none;
+        }
+
+        .btn-danger:hover {
+            background-color: #a00;
+        }
+
+        .btn-secondary {
+            background-color: #e0e0e0;
+            color: #666;
+            border: none;
+        }
+
+        .btn-secondary:disabled {
+            background-color: #e0e0e0;
+            color: #999;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- App Bar -->
+    <nav class="navbar navbar-light bg-white shadow-sm">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center" href="front_end_mainpage.html">
+                <span class="pchome-title">PChome 24h 購物</span>
+            </a>
+        </div>
+    </nav>
+
+    <!-- Register Area -->
+    <!-- Register Area -->
+    <div class="login-page">
+        <div class="login-box shadow-sm p-4 bg-white rounded">
+            <h3 class="text-center mb-3 fw-bold">立即註冊</h3>
+            <p class="text-center small">
+                已經擁有 PChome 24h購物帳號嗎？<a href="login.html">立即登入</a>
+            </p>
+
+            <form id="registerForm">
+                <div class="mb-3">
+                    <input type="text" class="form-control" placeholder="請輸入手機號碼">
+                </div>
+
+                <!-- 密碼輸入欄 -->
+                <div class="mb-3 position-relative">
+                    <input type="password" class="form-control" id="passwordInput" placeholder="請輸入密碼">
+                    <span class="toggle-password position-absolute top-50 end-0 translate-middle-y pe-3 text-muted"
+                        style="cursor: pointer;">
+                        <i class="bi bi-eye-slash" id="togglePasswordIcon"></i>
+                    </span>
+                </div>
+
+                <!-- 密碼檢查清單 -->
+                <ul class="list-unstyled small text-muted mb-3" id="passwordChecklist">
+                    <li id="lengthCheck" class="mb-1">❌ 至少 8 個字元</li>
+                    <li id="uppercaseCheck" class="mb-1">❌ 至少 1 個大寫英文</li>
+                    <li id="lowercaseCheck" class="mb-1">❌ 至少 1 個小寫英文</li>
+                    <li id="numberCheck" class="mb-1">❌ 至少 1 個數字</li>
+                    <li id="specialCheck" class="mb-1">❌ 至少 1 個特殊字元 ~ @ # $ % & ! * _ ? ^ - &lt; &gt; 等</li>
+                </ul>
+
+                <!-- 確認密碼輸入欄 -->
+                <div class="mb-3 position-relative">
+                    <input type="password" class="form-control" id="confirmPasswordInput" placeholder="確認密碼">
+                    <span class="toggle-password position-absolute top-50 end-0 translate-middle-y pe-3 text-muted"
+                        style="cursor: pointer;">
+                        <i class="bi bi-eye-slash" id="toggleConfirmPasswordIcon"></i>
+                    </span>
+                </div>
+
+                <button type="submit" class="btn btn-danger w-100 mb-3">註冊</button>
+
+                <p class="text-center small">
+                    點擊註冊，即表示您已閱讀並同意 PChome 之<br>
+                    <a href="#">會員條款</a> 與 <a href="#">客戶隱私權條款</a>
+                </p>
+            </form>
+        </div>
+    </div>
+
+    <!-- Bootstrap Icons -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.js"></script>
+
+
+    <!-- 密碼檢查器 Script -->
+    <script>
+        const passwordInput = document.getElementById('passwordInput');
+        const confirmPasswordInput = document.getElementById('confirmPasswordInput');
+        const togglePasswordIcon = document.getElementById('togglePasswordIcon');
+        const toggleConfirmPasswordIcon = document.getElementById('toggleConfirmPasswordIcon');
+
+        const lengthCheck = document.getElementById('lengthCheck');
+        const uppercaseCheck = document.getElementById('uppercaseCheck');
+        const lowercaseCheck = document.getElementById('lowercaseCheck');
+        const numberCheck = document.getElementById('numberCheck');
+        const specialCheck = document.getElementById('specialCheck');
+
+        // 密碼條件檢查
+        passwordInput.addEventListener('input', function () {
+            const value = passwordInput.value;
+
+            lengthCheck.innerHTML = value.length >= 8 ? "✅ 至少 8 個字元" : "❌ 至少 8 個字元";
+            uppercaseCheck.innerHTML = /[A-Z]/.test(value) ? "✅ 至少 1 個大寫英文" : "❌ 至少 1 個大寫英文";
+            lowercaseCheck.innerHTML = /[a-z]/.test(value) ? "✅ 至少 1 個小寫英文" : "❌ 至少 1 個小寫英文";
+            numberCheck.innerHTML = /[0-9]/.test(value) ? "✅ 至少 1 個數字" : "❌ 至少 1 個數字";
+            specialCheck.innerHTML = /[~@#$%&!*_\-\?\^<>]/.test(value) ? "✅ 至少 1 個特殊字元 ~ @ # $ % & ! * _ ? ^ - < > 等" : "❌ 至少 1 個特殊字元 ~ @ # $ % & ! * _ ? ^ - < > 等";
+        });
+
+        // 切換密碼顯示
+        function togglePassword(inputField, icon) {
+            if (inputField.type === "password") {
+                inputField.type = "text";
+                icon.classList.remove('bi-eye-slash');
+                icon.classList.add('bi-eye');
+            } else {
+                inputField.type = "password";
+                icon.classList.remove('bi-eye');
+                icon.classList.add('bi-eye-slash');
+            }
+        }
+
+        document.querySelectorAll('.toggle-password').forEach(function (toggle) {
+            toggle.addEventListener('click', function () {
+                if (this.querySelector('i').id === 'togglePasswordIcon') {
+                    togglePassword(passwordInput, togglePasswordIcon);
+                } else if (this.querySelector('i').id === 'toggleConfirmPasswordIcon') {
+                    togglePassword(confirmPasswordInput, toggleConfirmPasswordIcon);
+                }
+            });
+        });
+    </script>
+
+</body>
+
+</html>

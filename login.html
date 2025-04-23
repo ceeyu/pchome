@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PChome 登入頁</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body {
+  background-color: #f2f2f2;
+  font-family: Arial, sans-serif;
+}
+
+.login-page {
+  max-width: 400px;
+  margin: 50px auto;
+  padding: 20px;
+}
+
+.logo {
+  text-align: left;
+  margin-bottom: 30px;
+}
+
+.logo img {
+  height: 50px;
+}
+
+.login-box {
+  background-color: #ffffff;
+  border-radius: 8px;
+}
+
+.btn-danger {
+  background-color: #d00;
+  border: none;
+}
+
+.btn-danger:hover {
+  background-color: #a00;
+}
+.pchome-title {
+  color: #d00;
+  font-weight: bold;
+  font-size: 1.5rem; /* 大小可以調整，看起來醒目 */
+}
+  </style>
+</head>
+<body>
+
+  <nav class="navbar navbar-light bg-white shadow-sm">
+    <div class="container">
+      <a class="navbar-brand d-flex align-items-center" href="front_end_mainpage.html">
+        <span class="pchome-title">PChome 24h 購物</span>
+      </a>
+    </div>
+  </nav>
+
+  <div class="login-page">
+    
+
+    <div class="login-box shadow-sm p-4 bg-white rounded">
+      <h3 class="text-center mb-3">歡迎登入</h3>
+      <p class="text-center small">
+        沒有 PChome 24h購物帳號？<a href="register.html">立即註冊</a>
+      </p>
+
+      <form>
+        <div class="mb-3">
+          <input type="text" class="form-control" placeholder="請輸入手機號碼 或 Email">
+        </div>
+
+        <div class="form-check mb-3">
+          <input class="form-check-input" type="checkbox" id="rememberMe" checked>
+          <label class="form-check-label" for="rememberMe">記住帳號</label>
+          <a href="#" class="float-end small">忘記密碼</a>
+        </div>
+
+        <button type="submit" class="btn btn-danger w-100 mb-3">繼續</button>
+
+        <p class="text-center small">
+          登入帳號，即表示您已閱讀並同意 PChome 之<br>
+          <a href="#">會員條款</a> 與 <a href="#">客戶隱私權條款</a>
+        </p>
+
+        
+      </form>
+    </div>
+  </div>
+
+</body>
+</html>

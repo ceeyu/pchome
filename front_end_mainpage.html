@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PChome 24h 仿首頁</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f2f2f2;
+            font-family: Arial, sans-serif;
+        }
+
+        .topbar {
+            background-color: #d00;
+            padding: 10px 20px;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: relative;
+        }
+
+        .navbar-custom {
+            background-color: #d00;
+            padding: 5px;
+            font-size: 14px;
+        }
+
+        .navbar-custom a {
+            color: white;
+            margin: 0 10px;
+            text-decoration: none;
+        }
+
+        .search-wrapper {
+            position: relative;
+            max-width: 700px;
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        .search-bar {
+            display: flex;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            width: 100%;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* 左邊分類按鈕 */
+        .search-bar .dropdown {
+            flex-shrink: 0;
+        }
+
+        /* 中間輸入框 */
+        .search-bar input {
+            flex-grow: 1;
+            border: none;
+            padding: 8px 12px;
+        }
+
+        /* 右邊放大鏡 */
+        .search-bar button {
+            flex-shrink: 0;
+            background-color: white;
+            border: none;
+            padding: 8px 12px;
+        }
+
+        .dropdown-toggle {
+            background-color: #222;
+            color: white;
+            border: none;
+        }
+
+
+        .suggestions-container {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            width: 100%;
+            margin-top: 5px;
+            background: white;
+            border-radius: 10px;
+            padding: 15px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+            display: none;
+            z-index: 9;
+        }
+
+        .tag-list {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 10px;
+        }
+
+        .tag-item {
+            background-color: #eee;
+            padding: 8px 20px;
+            border-radius: 20px;
+            text-align: center;
+            cursor: pointer;
+        }
+
+        .tag-item.active {
+            border: 2px solid #007bff;
+            background-color: #fff;
+        }
+
+        .popular-list {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .popular-list li {
+            padding: 5px 0;
+            font-size: 16px;
+        }
+
+        .topbar input {
+            width: 300px;
+            border-radius: 4px;
+            border: none;
+            padding: 5px 10px;
+        }
+
+        .navbar-custom {
+            background-color: #d00;
+            padding: 5px;
+            font-size: 14px;
+        }
+
+        .navbar-custom a {
+            color: white;
+            margin: 0 10px;
+            text-decoration: none;
+        }
+
+        .category-sidebar h6 {
+            text-align: center;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+
+
+
+        .main-content {
+            background: white;
+            padding: 10px;
+            border-radius: 8px;
+        }
+
+        .main-banner img {
+            width: 100%;
+            border-radius: 8px;
+        }
+
+        .product-card img {
+            width: 100%;
+            height: 150px;
+            object-fit: contain;
+        }
+
+        .product-title {
+            font-size: 14px;
+            margin-top: 10px;
+            min-height: 40px;
+        }
+
+        .price {
+            color: #d00;
+            font-weight: bold;
+        }
+
+        .sub-category {
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 15px;
+        }
+
+        .sub-category a {
+            margin-right: 15px;
+            font-size: 14px;
+            color: #333;
+            text-decoration: none;
+        }
+
+        .sub-category a:hover {
+            color: #d00;
+        }
+
+        html,
+        body {
+            height: 100%;
+        }
+
+        .container-fluid {
+            min-height: 100vh;
+            padding-bottom: 50px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="topbar"
+        style="background-color: #d00; padding: 10px;">
+        <div class="logo text-white fw-bold" style="flex: 1;">
+            PChome 24h 購物
+        </div>
+
+        <!-- 搜尋列整個容器 -->
+        <div class="search-wrapper">
+            <div class="search-bar p-2 align-items-center">
+                <div class="dropdown">
+                    <button class="btn btn-dark dropdown-toggle" type="button" id="categoryDropdown">
+                        全站
+                    </button>
+                </div>
+                <input type="text" class="form-control border-0" placeholder="搜尋商品..." id="searchInput">
+                <button class="btn btn-light border-0" id="searchButton" type="submit">
+                    <i class="bi bi-search"></i>
+                </button>
+            </div>
+            <div class="suggestions-container" id="suggestions">
+                <div id="tagSection">
+                    <div class="tag-list" id="tagList"></div>
+                </div>
+                <div id="hotKeywordsSection" class="mt-4">
+                    <h5>熱門搜尋</h5>
+                    <ul class="popular-list" id="hotList"></ul>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- 右側功能列 -->
+        <div class="nav-buttons d-flex justify-content-end" style="flex: 1;">
+            <a class="nav-link text-white ms-3" href="#">購物車</a>
+            <a class="nav-link text-white ms-3" href="#">我的訂單</a>
+            <a class="nav-link text-white ms-3" href="#">顧客中心</a>
+            <a class="nav-link text-white ms-3" href="register.html">註冊</a>
+            <a class="nav-link text-white ms-3" href="login.html">登入</a>
+        </div>
+    </div>
+
+
+    <!-- 主選單 -->
+    <div class="navbar-custom text-center">
+        <a href="#">3C</a>
+        <a href="#">周邊</a>
+        <a href="#">筆電</a>
+        <a href="#">通訊</a>
+        <a href="#">數位</a>
+        <a href="#">家電</a>
+        <a href="#">日用</a>
+        <a href="#">母嬰</a>
+        <a href="#">食品</a>
+        <a href="#">生活</a>
+        <a href="#">居家</a>
+        <a href="#">休閒</a>
+        <a href="#">保健</a>
+        <a href="#">美妝</a>
+        <a href="#">時尚</a>
+        <a href="#">書店</a>
+    </div>
+
+    <div class="container-fluid mt-3">
+        <div class="container" style="max-width: 1020px;">
+            <div class="card mb-4">
+                <div class="card-header" style="font-weight: bold;">暢銷排行</div>
+                <div class="card-body">
+                    <div class="row text-center">
+                        <div class="col-md-2">
+                            <h1 class="text-primary" style="opacity: 0.1;">1</h1>
+                            <img src="https://via.placeholder.com/100x100" class="img-fluid">
+                            <div>Kleenex舒潔 衛生紙<br><span class="text-danger fw-bold">$759</span></div>
+                        </div>
+                        <div class="col-md-2">
+                            <h1 class="text-primary" style="opacity: 0.1;">2</h1>
+                            <img src="https://via.placeholder.com/100x100" class="img-fluid">
+                            <div>Apple MacBook Air<br><span class="text-danger fw-bold">$41,900</span></div>
+                        </div>
+                        <div class="col-md-2">
+                            <h1 class="text-primary" style="opacity: 0.1;">3</h1>
+                            <img src="https://via.placeholder.com/100x100" class="img-fluid">
+                            <div>盛香珍 堅果量販禮盒<br><span class="text-danger fw-bold">$599</span></div>
+                        </div>
+                        <div class="col-md-2">
+                            <h1 class="text-primary" style="opacity: 0.1;">4</h1>
+                            <img src="https://via.placeholder.com/100x100" class="img-fluid">
+                            <div>ASUS ROG TUF Gaming<br><span class="text-danger fw-bold">$31,999</span></div>
+                        </div>
+                        <div class="col-md-2">
+                            <h1 class="text-primary" style="opacity: 0.1;">5</h1>
+                            <img src="https://via.placeholder.com/100x100" class="img-fluid">
+                            <div>Casa卡薩 濾掛咖啡<br><span class="text-danger fw-bold">$649</span></div>
+                        </div>
+                        <div class="col-md-2">
+                            <h1 class="text-primary" style="opacity: 0.1;">6</h1>
+                            <img src="https://via.placeholder.com/100x100" class="img-fluid">
+                            <div>Logitech 羅技 PROX<br><span class="text-danger fw-bold">$2,990</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+        <!-- 暢銷排行結束 -->
+        <div class="row">
+            <div class="col-md-2 category-sidebar">
+                <h6>總分類</h6>
+                <div id="list-example" class="list-group" style="width: 100px; margin: 0 auto;">
+                    <a class="list-group-item list-group-item-action" href="#">3C資訊</a>
+                    <a class="list-group-item list-group-item-action" href="#">數位通訊</a>
+                    <a class="list-group-item list-group-item-action" href="#">生活家電</a>
+                    <a class="list-group-item list-group-item-action" href="#">日用清潔</a>
+                    <a class="list-group-item list-group-item-action" href="#">居家</a>
+                    <a class="list-group-item list-group-item-action" href="#">運動戶外</a>
+                    <a class="list-group-item list-group-item-action" href="#">時尚精品</a>
+                    <a class="list-group-item list-group-item-action" href="#">美妝保養</a>
+                    <a class="list-group-item list-group-item-action" href="#">保健醫療</a>
+                    <a class="list-group-item list-group-item-action" href="#">人氣美食</a>
+                    <a class="list-group-item list-group-item-action" href="#">圖書票券</a>
+                </div>
+            </div>
+
+            <div class="col-md-10">
+                <div class="card" style="width: 1000px;">
+                    <div class="card-header">
+                        3C資訊
+                    </div>
+                    <div class="row g-0">
+                        <div class="col-md-2">
+                            <div class="list-group list-group-flush" id="list-tab" role="tablist">
+                                <a class="list-group-item list-group-item-action show active" id="list-laptop-list"
+                                    data-bs-toggle="list" href="#list-laptop" role="tab">筆記型電腦</a>
+                                <a class="list-group-item list-group-item-action" id="list-gaming-list"
+                                    data-bs-toggle="list" href="#list-gaming" role="tab">電競筆電</a>
+                                <a class="list-group-item list-group-item-action" id="list-desktop-list"
+                                    data-bs-toggle="list" href="#list-desktop" role="tab">桌機/螢幕</a>
+                                <a class="list-group-item list-group-item-action" id="list-laptop-list"
+                                    data-bs-toggle="list" href="#list-storage" role="tab">儲存硬碟</a>
+                                <a class="list-group-item list-group-item-action" id="list-gaming-list"
+                                    data-bs-toggle="list" href="#list-diy" role="tab">DIY零件</a>
+                                <a class="list-group-item list-group-item-action" id="list-desktop-list"
+                                    data-bs-toggle="list" href="#list-cable" role="tab">線材HUB</a>
+                                <a class="list-group-item list-group-item-action" id="list-laptop-list"
+                                    data-bs-toggle="list" href="#list-input" role="tab">鍵盤/滑鼠</a>
+                                <a class="list-group-item list-group-item-action" id="list-gaming-list"
+                                    data-bs-toggle="list" href="#list-audio" role="tab">耳麥/喇叭/軟體</a>
+                                <a class="list-group-item list-group-item-action" id="list-desktop-list"
+                                    data-bs-toggle="list" href="#list-network" role="tab">網路/視訊</a>
+                                <a class="list-group-item list-group-item-action" id="list-desktop-list"
+                                    data-bs-toggle="list" href="#list-printer" role="tab">印表機</a>
+
+                            </div>
+                        </div>
+
+                        <div class="col-md-10">
+
+                            <div class="tab-content p-3" id="nav-tabContent">
+
+                                <div class="tab-pane fade show active" id="list-laptop" role="tabpanel">
+                                    <img src="https://via.placeholder.com/800x200?text=筆記型電腦+Banner"
+                                        class="img-fluid rounded mb-4">
+                                    <div class="row text-center">
+                                        <div class="col-md-3 mb-4">
+                                            <img src="https://via.placeholder.com/150x100" class="img-fluid">
+                                            <div>ACER 15.6吋 i5 RTX4060 電競筆電<br><span
+                                                    class="text-danger fw-bold">$30,900</span></div>
+                                        </div>
+                                        <div class="col-md-3 mb-4">
+                                            <img src="https://via.placeholder.com/150x100" class="img-fluid">
+                                            <div>ACER 15.6吋 i9 RTX4060 電競筆電<br><span
+                                                    class="text-danger fw-bold">$38,900</span></div>
+                                        </div>
+                                        <div class="col-md-3 mb-4">
+                                            <img src="https://via.placeholder.com/150x100" class="img-fluid">
+                                            <div>ACER 16吋 Ultra 5 AI 輕薄長效筆電<br><span
+                                                    class="text-danger fw-bold">$19,700</span></div>
+                                        </div>
+                                        <div class="col-md-3 mb-4">
+                                            <img src="https://via.placeholder.com/150x100" class="img-fluid">
+                                            <div>ASUS OLED 16吋 AI 輕薄筆電<br><span
+                                                    class="text-danger fw-bold">$35,999</span></div>
+                                        </div>
+                                        <div class="col-md-3 mb-4">
+                                            <img src="https://via.placeholder.com/150x100" class="img-fluid">
+                                            <div>ASUS 13代 i9 14吋 輕薄筆電<br><span
+                                                    class="text-danger fw-bold">$36,999</span></div>
+                                        </div>
+                                        <div class="col-md-3 mb-4">
+                                            <img src="https://via.placeholder.com/150x100" class="img-fluid">
+                                            <div>HP 15.6吋 效能筆電<br><span class="text-danger fw-bold">$14,990</span></div>
+                                        </div>
+                                        <div class="col-md-3 mb-4">
+                                            <img src="https://via.placeholder.com/150x100" class="img-fluid">
+                                            <div>HP 14吋 輕薄筆電<br><span class="text-danger fw-bold">$24,990</span></div>
+                                        </div>
+                                        <div class="col-md-3 mb-4">
+                                            <img src="https://via.placeholder.com/150x100" class="img-fluid">
+                                            <div>ASUS i7/8G/512G 商用筆電<br><span
+                                                    class="text-danger fw-bold">$22,999</span></div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="tab-pane fade" id="list-gaming" role="tabpanel">
+                                    <!-- 電競筆電商品內容 -->
+                                    <p>這裡是電競筆電區域</p>
+                                </div>
+                                <div class="tab-pane fade" id="list-desktop" role="tabpanel">
+                                    <!-- 桌機/螢幕商品內容 -->
+                                    <p>這裡是桌機/螢幕區域</p>
+                                </div>
+
+                                <!-- 儲存硬碟 -->
+                                <div class="tab-pane fade" id="list-storage" role="tabpanel">
+                                    <img src="https://via.placeholder.com/800x200?text=儲存硬碟+Banner"
+                                        class="img-fluid rounded mb-4">
+                                    <p>這裡可以放硬碟/SSD/隨身碟</p>
+                                </div>
+
+                                <!-- DIY零件 -->
+                                <div class="tab-pane fade" id="list-diy" role="tabpanel">
+                                    <img src="https://via.placeholder.com/800x200?text=DIY零件+Banner"
+                                        class="img-fluid rounded mb-4">
+                                    <p>DIY 零組件如 CPU、主機板、記憶體等</p>
+                                </div>
+
+                                <!-- 線材/HUB -->
+                                <div class="tab-pane fade" id="list-cable" role="tabpanel">
+                                    <img src="https://via.placeholder.com/800x200?text=線材HUB+Banner"
+                                        class="img-fluid rounded mb-4">
+                                    <p>轉接線材與 USB HUB 展示區</p>
+                                </div>
+
+                                <!-- 鍵盤/滑鼠 -->
+                                <div class="tab-pane fade" id="list-input" role="tabpanel">
+                                    <img src="https://via.placeholder.com/800x200?text=鍵盤滑鼠+Banner"
+                                        class="img-fluid rounded mb-4">
+                                    <p>鍵鼠組合、電競鍵盤、無線滑鼠等</p>
+                                </div>
+
+                                <!-- 耳麥/喇叭/軟體 -->
+                                <div class="tab-pane fade" id="list-audio" role="tabpanel">
+                                    <p>耳機麥克風、藍牙音響、Office 套件等</p>
+                                </div>
+
+                                <!-- 網路/視訊 -->
+                                <div class="tab-pane fade" id="list-network" role="tabpanel">
+                                    <img src="https://via.placeholder.com/800x200?text=網路視訊+Banner"
+                                        class="img-fluid rounded mb-4">
+                                    <p>路由器、攝影機、網卡等</p>
+                                </div>
+
+                                <!-- 印表機 -->
+                                <div class="tab-pane fade" id="list-printer" role="tabpanel">
+                                    <img src="https://via.placeholder.com/800x200?text=印表機+Banner"
+                                        class="img-fluid rounded mb-4">
+                                    <p>印表機、墨水匣、掃描機等</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+
+                </div>
+
+                <!-- 數位通訊卡片 -->
+                <div class="card mt-4" style="width: 1000px;">
+                    <div class="card-header">
+                        數位通訊
+                    </div>
+                    <div class="row g-0">
+                        <!-- 左邊標籤區 -->
+                        <div class="col-md-2">
+                            <div class="list-group list-group-flush" id="list-tab-digital" role="tablist">
+                                <a class="list-group-item list-group-item-action active" id="list-apple-list"
+                                    data-bs-toggle="list" href="#list-apple" role="tab">Apple</a>
+                                <a class="list-group-item list-group-item-action" id="list-samsung-list"
+                                    data-bs-toggle="list" href="#list-samsung" role="tab">Samsung</a>
+                                <a class="list-group-item list-group-item-action" id="list-xiaomi-list"
+                                    data-bs-toggle="list" href="#list-xiaomi" role="tab">小米</a>
+                                <a class="list-group-item list-group-item-action" id="list-tablet-list"
+                                    data-bs-toggle="list" href="#list-tablet" role="tab">手機/平板</a>
+                                <a class="list-group-item list-group-item-action" id="list-earphone-list"
+                                    data-bs-toggle="list" href="#list-earphone" role="tab">耳機</a>
+                                <a class="list-group-item list-group-item-action" id="list-camera-list"
+                                    data-bs-toggle="list" href="#list-camera" role="tab">相機單眼</a>
+                                <a class="list-group-item list-group-item-action" id="list-game-list"
+                                    data-bs-toggle="list" href="#list-game" role="tab">電玩遊戲</a>
+                                <a class="list-group-item list-group-item-action" id="list-charger-list"
+                                    data-bs-toggle="list" href="#list-charger" role="tab">充電傳輸</a>
+                                <a class="list-group-item list-group-item-action" id="list-case-list"
+                                    data-bs-toggle="list" href="#list-case" role="tab">殼貼配件</a>
+                                <a class="list-group-item list-group-item-action" id="list-sport-list"
+                                    data-bs-toggle="list" href="#list-sport" role="tab">運動空拍</a>
+                                <a class="list-group-item list-group-item-action" id="list-photography-list"
+                                    data-bs-toggle="list" href="#list-photography" role="tab">攝影配件</a>
+                            </div>
+                        </div>
+
+                        <!-- 右邊內容區 -->
+                        <div class="col-md-10">
+                            <div class="tab-content p-3" id="nav-tabContent-digital">
+
+                                <!-- Apple區域 -->
+                                <div class="tab-pane fade show active" id="list-apple" role="tabpanel">
+                                    <img src="https://via.placeholder.com/800x200?text=數位通訊Banner"
+                                        class="img-fluid rounded mb-4">
+                                    <div class="row text-center">
+                                        <div class="col-md-3 mb-4">
+                                            <img src="https://via.placeholder.com/150x100" class="img-fluid">
+                                            <div>iPhone 16 Pro 128G<br><span class="text-danger fw-bold">$34,990</span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3 mb-4">
+                                            <img src="https://via.placeholder.com/150x100" class="img-fluid">
+                                            <div>iPad A16 (11代) 128G/WiFi<br><span
+                                                    class="text-danger fw-bold">$11,900</span></div>
+                                        </div>
+                                        <div class="col-md-3 mb-4">
+                                            <img src="https://via.placeholder.com/150x100" class="img-fluid">
+                                            <div>MacBook Air 13吋 M4晶片<br><span
+                                                    class="text-danger fw-bold">$34,900</span></div>
+                                        </div>
+                                        <div class="col-md-3 mb-4">
+                                            <img src="https://via.placeholder.com/150x100" class="img-fluid">
+                                            <div>Apple Watch S10 GPS<br><span class="text-danger fw-bold">$12,825</span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3 mb-4">
+                                            <img src="https://via.placeholder.com/150x100" class="img-fluid">
+                                            <div>iPhone 16e 128G<br><span class="text-danger fw-bold">$20,900</span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3 mb-4">
+                                            <img src="https://via.placeholder.com/150x100" class="img-fluid">
+                                            <div>iPad Air 11吋 M3 128G/WiFi<br><span
+                                                    class="text-danger fw-bold">$19,900</span></div>
+                                        </div>
+                                        <div class="col-md-3 mb-4">
+                                            <img src="https://via.placeholder.com/150x100" class="img-fluid">
+                                            <div>Apple Watch Ultra 2 LTE<br><span
+                                                    class="text-danger fw-bold">$26,505</span></div>
+                                        </div>
+                                        <div class="col-md-3 mb-4">
+                                            <img src="https://via.placeholder.com/150x100" class="img-fluid">
+                                            <div>AirPods 4<br><span class="text-danger fw-bold">$4,590</span></div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- 其他Samsung、小米等等 -->
+                                <div class="tab-pane fade" id="list-samsung" role="tabpanel">
+                                    <p>Samsung商品區</p>
+                                </div>
+                                <div class="tab-pane fade" id="list-xiaomi" role="tabpanel">
+                                    <p>小米商品區</p>
+                                </div>
+                                <div class="tab-pane fade" id="list-tablet" role="tabpanel">
+                                    <p>手機/平板區</p>
+                                </div>
+                                <div class="tab-pane fade" id="list-earphone" role="tabpanel">
+                                    <p>耳機區</p>
+                                </div>
+                                <div class="tab-pane fade" id="list-camera" role="tabpanel">
+                                    <p>相機單眼區</p>
+                                </div>
+                                <div class="tab-pane fade" id="list-game" role="tabpanel">
+                                    <p>電玩遊戲區</p>
+                                </div>
+                                <div class="tab-pane fade" id="list-charger" role="tabpanel">
+                                    <p>充電傳輸區</p>
+                                </div>
+                                <div class="tab-pane fade" id="list-case" role="tabpanel">
+                                    <p>殼貼配件區</p>
+                                </div>
+                                <div class="tab-pane fade" id="list-sport" role="tabpanel">
+                                    <p>運動空拍區</p>
+                                </div>
+                                <div class="tab-pane fade" id="list-photography" role="tabpanel">
+                                    <p>攝影配件區</p>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+
+
+        </div>
+    </div>
+
+    <!-- 引入Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        const categoryDropdown = document.getElementById('categoryDropdown');
+        const tagList = document.getElementById('tagList');
+        const suggestions = document.getElementById('suggestions');
+        const hotKeywordsSection = document.getElementById('hotKeywordsSection');
+        const hotList = document.getElementById('hotList');
+        const searchInput = document.getElementById('searchInput');
+
+        let currentCategory = "全站";
+
+        const tagData = {
+            "全站": ["全站", "3C", "周邊", "筆電", "通訊", "數位", "家電", "日用", "母嬰", "食品", "生活", "居家", "休閒", "保健", "美妝", "時尚", "書店"],
+            "3C": ["滑鼠", "耳機", "電競螢幕", "電腦桌", "鍵盤"],
+            "周邊": ["USB Hub", "讀卡機", "延長線", "行動電源"],
+            "筆電": ["ACER", "ASUS", "HP", "MacBook", "Lenovo"],
+            "通訊": ["iPhone", "三星", "小米", "Google", "Sony"]
+        };
+
+        const hotData = {
+            "全站": ["MacBook Air M4", "筆電", "電風扇", "洗衣機", "switch2", "電腦螢幕", "空氣清淨機", "ps5手把", "HDMI線", "ps portal"],
+            "3C": ["滑鼠", "耳機", "電競螢幕", "電腦桌", "鍵盤"],
+            "周邊": ["USB Hub", "讀卡機", "延長線", "行動電源"],
+            "筆電": ["MacBook Air", "HP Spectre", "ASUS Vivobook", "Lenovo Thinkpad"],
+            "通訊": ["iPhone 16", "Galaxy S24", "小米13", "Sony Xperia"]
+        };
+
+        function renderTags(category) {
+            tagList.innerHTML = '';
+            (tagData[category] || []).forEach(tag => {
+                const tagDiv = document.createElement('div');
+                tagDiv.className = 'tag-item';
+                tagDiv.innerText = tag;
+                tagDiv.onclick = () => {
+                    document.querySelectorAll('.tag-item').forEach(el => el.classList.remove('active'));
+                    tagDiv.classList.add('active');
+                    categoryDropdown.innerText = tag;
+                    currentCategory = tag;
+                    renderHotKeywords(currentCategory);
+                };
+                tagList.appendChild(tagDiv);
+            });
+        }
+
+        function renderHotKeywords(category) {
+            hotList.innerHTML = '';
+            (hotData[category] || []).forEach((word, index) => {
+                const li = document.createElement('li');
+                li.innerHTML = `<strong>${index + 1}.</strong> ${word}`;
+                hotList.appendChild(li);
+            });
+        }
+
+        categoryDropdown.addEventListener('click', function () {
+            if (suggestions.style.display === 'none' || suggestions.style.display === '') {
+                renderTags(currentCategory);
+                hotKeywordsSection.style.display = 'none';
+                suggestions.style.display = 'block';
+            } else {
+                suggestions.style.display = 'none';
+            }
+        });
+
+        searchInput.addEventListener('focus', function () {
+            if (searchInput.value.trim() === "") {
+                renderHotKeywords(currentCategory);
+                hotKeywordsSection.style.display = 'block';
+                tagList.innerHTML = '';
+                suggestions.style.display = 'block';
+            }
+        });
+
+        searchInput.addEventListener('blur', function () {
+            setTimeout(() => {
+                suggestions.style.display = 'none';
+            }, 200);
+        });
+    </script>
+</body>
+
+</html>
